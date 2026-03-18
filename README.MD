@@ -34,7 +34,7 @@ Real-time multi-object tracking, counting, and movement analysis using **YOLOv8 
 
 ```bash
 # 1. Clone
-git clone https://github.com/yourusername/video-tracking-analytics.git
+git clone https://github.com/tajwarchy/video-tracking-analytics.git
 cd video-tracking-analytics
 
 # 2. Create environment
