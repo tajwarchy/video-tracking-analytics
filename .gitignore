@@ -1,0 +1,53 @@
+cat > .gitignore << 'EOF'
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Weights & large files
+weights/
+*.pt
+*.pth
+*.onnx
+
+# Results (generated output)
+results/tracked_videos/
+results/heatmaps/
+results/statistics/
+results/reports/
+
+# Data videos (keep folder, ignore video files)
+data/sample_videos/*.mp4
+data/sample_videos/*.avi
+data/sample_videos/*.mov
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs
+*.log
+logs/
+EOF

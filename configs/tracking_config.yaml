@@ -1,0 +1,100 @@
+# ─────────────────────────────────────────────
+#  Video Tracking Analytics — Master Config
+# ─────────────────────────────────────────────
+
+# ── Model ──────────────────────────────────────
+model:
+  weights: weights/yolov8n.pt      # path to YOLO weights
+  size: n                          # n | s | m | l | x
+  confidence: 0.4                  # detection confidence threshold
+  iou: 0.5                         # NMS IOU threshold
+  device: mps                      # mps | cpu | cuda
+  imgsz: 640                       # inference image size
+
+# ── Classes to track ───────────────────────────
+# COCO class IDs: 0=person, 1=bicycle, 2=car, 3=motorcycle,
+#                 5=bus, 7=truck, 15=cat, 16=dog
+classes:
+  filter: [0, 2, 3, 5, 7]         # track only these class IDs
+  names:                           # human-readable labels
+    0: person
+    2: car
+    3: motorcycle
+    5: bus
+    7: truck
+
+# ── Tracker ────────────────────────────────────
+tracker:
+  type: bytetrack                  # bytetrack | deepsort
+  track_thresh: 0.4                # min score for high-confidence detections
+  match_thresh: 0.8                # IOU threshold for association
+  track_buffer: 30                 # frames to keep lost tracks alive
+  min_box_area: 100                # ignore tiny bounding boxes (px²)
+  frame_rate: 30                   # expected input FPS (used internally)
+
+# ── Trajectory ─────────────────────────────────
+trajectory:
+  max_trail_length: 60             # max frames of trail to draw
+  min_track_length: 5              # min frames before drawing trail
+
+# ── Counting lines ─────────────────────────────
+# Each line is defined by two points: [[x1,y1],[x2,y2]]
+# Coordinates are relative (0.0–1.0) to frame size
+counting:
+  enabled: true
+  lines:
+    - name: "Line A"
+      points: [[0.5, 0.0], [0.5, 1.0]]   # vertical center line
+      direction: horizontal               # crossing direction to count
+    - name: "Line B"
+      points: [[0.0, 0.5], [1.0, 0.5]]   # horizontal center line
+      direction: vertical
+
+# ── Heatmap ────────────────────────────────────
+heatmap:
+  enabled: true
+  blur_kernel: 25                  # Gaussian blur kernel size
+  colormap: HOT                    # OpenCV colormap name
+  alpha: 0.5                       # overlay blend alpha
+  accumulate_every_n: 1            # accumulate centroid every N frames
+
+# ── Output / Export ────────────────────────────
+output:
+  save_video: true
+  video_fps: 30
+  video_codec: mp4v
+  save_csv: true
+  save_json: true
+  results_dir: results/
+
+# ── Visualization ──────────────────────────────
+visualization:
+  show_boxes: true
+  show_ids: true
+  show_labels: true
+  show_confidence: false
+  show_trails: true
+  show_hud: true                   # FPS / count overlay
+  show_counting_lines: true
+  trail_fade: true                 # older trail points fade out
+  box_thickness: 2
+  font_scale: 0.6
+  # Per-class colors (BGR)
+  colors:
+    0:  [0, 255, 127]              # person  → green
+    2:  [255, 165, 0]              # car     → orange
+    3:  [0, 165, 255]              # motorcycle → amber
+    5:  [255, 0, 0]                # bus     → blue
+    7:  [0, 0, 255]                # truck   → red
+
+# ── Video Input ────────────────────────────────
+video:
+  source: data/sample_videos/sample.mp4   # path or 0 for webcam
+  resize_width: 1280               # resize input (null = no resize)
+  resize_height: 720
+
+# ── Performance ────────────────────────────────
+performance:
+  skip_frames: 0                   # process every Nth frame (0 = all)
+  max_frames: null                 # null = process entire video
+  verbose: true
